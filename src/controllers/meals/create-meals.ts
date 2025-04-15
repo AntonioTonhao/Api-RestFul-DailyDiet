@@ -9,9 +9,10 @@ export async function createMeals(
   const userSchema = z.object({
     title: z.string(),
     description: z.string(),
+    isondiet: z.boolean(),
   })
 
-  const { title, description } = userSchema.parse(request.body)
+  const { title, description, isondiet } = userSchema.parse(request.body)
 
   const { sessionId } = request.cookies
 
@@ -20,6 +21,7 @@ export async function createMeals(
       title,
       description,
       user_Id: sessionId!,
+      is_on_diet: isondiet,
     },
   })
 

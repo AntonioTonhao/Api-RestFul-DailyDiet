@@ -9,10 +9,8 @@ export async function deleteMeal(request: FastifyRequest, reply: FastifyReply) {
 
   const { idParams } = schemaIdParams.parse(request.params)
 
-  const { sessionId } = request.cookies
-
   await prisma.meals.delete({
-    where: { user_Id: sessionId, id: idParams },
+    where: { id: idParams },
   })
 
   return reply.status(200).send({

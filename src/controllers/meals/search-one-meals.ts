@@ -10,25 +10,11 @@ export async function searchOneMeals(
     idParams: z.string().uuid(),
   })
 
-  const requestParams = schemaIdParams.safeParse(request.params)
+  const { idParams } = schemaIdParams.parse(request.params)
 
-  if (!requestParams.success) {
-    return reply.status(400).send({
-      message: 'Params not found',
-    })
-  }
-
-  const { idParams } = requestParams.data
-
-  const { sessionId } = request.cookies
-
-  const meal = await prisma.meals.findFirst({
-    where: { user_Id: sessionId, id: idParams },
+  const meal = await prisma.meals.findUnique({
+    where: { id: idParams },
   })
-
-  if (!meal) {
-    return reply.status(401).send()
-  }
 
   return reply.status(200).send({ meal })
 }
